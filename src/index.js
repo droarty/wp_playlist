@@ -32,12 +32,12 @@ import save from './save';
  *
  * @see https://developer.wordpress.org/block-editor/developers/block-api/#registering-a-block
  */
-registerBlockType( 'create-block/playlist', {
+registerBlockType('create-block/playlist', {
 	/**
 	 * This is the display title for your block, which can be translated with `i18n` functions.
 	 * The block inserter will show this name.
 	 */
-	title: __( 'Playlist', 'playlist' ),
+	title: __('Playlist', 'playlist'),
 
 	/**
 	 * This is a short description for your block, can be translated with `i18n` functions.
@@ -68,6 +68,37 @@ registerBlockType( 'create-block/playlist', {
 		html: false,
 	},
 
+	attributes: {
+		audio_url: {
+			type: 'string',
+			source: 'attribute',
+			attribute: 'src',
+			selector: 'audio'
+		},
+		clips: {
+			type: 'array',
+			source: 'query',
+			selector: 'div.playlist-clip',
+			query: {
+				start: {
+					type: 'string',
+					source: 'attribute',
+					attribute: 'data-playlist-clip-start',
+				},
+				end: {
+					type: 'string',
+					source: 'attribute',
+					attribute: 'data-playlist-clip-end',
+				},
+				description: {
+					type: 'string',
+					source: 'text',
+					selector: 'div.playlist-clip-description',
+				},
+			}
+		}
+	},
+
 	/**
 	 * @see ./edit.js
 	 */
@@ -77,4 +108,4 @@ registerBlockType( 'create-block/playlist', {
 	 * @see ./save.js
 	 */
 	save,
-} );
+});

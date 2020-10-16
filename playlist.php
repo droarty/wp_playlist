@@ -34,6 +34,7 @@ function create_block_playlist_block_init() {
 		$script_asset['dependencies'],
 		$script_asset['version']
 	);
+
 	wp_set_script_translations( 'create-block-playlist-block-editor', 'playlist' );
 
 	$editor_css = 'build/index.css';

@@ -45,6 +45,8 @@ function create_block_playlist_block_init() {
 		filemtime( "$dir/$editor_css" )
 	);
 
+	// To generate this second index file for the frontend javascript, we needed to modify how webpack works...
+	// see the package commands for start and build per this doc https://www.npmjs.com/package/@wordpress/scripts#using-css
 	$frontend_asset_path = "$dir/build/index.asset.php";
 	$frontend_asset = require( $frontend_asset_path );
 	$frontend_index_js = 'build/index.frontend.js';

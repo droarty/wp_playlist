@@ -45,6 +45,16 @@ function create_block_playlist_block_init() {
 		filemtime( "$dir/$editor_css" )
 	);
 
+	$frontend_asset_path = "$dir/build/index.asset.php";
+	$frontend_asset = require( $frontend_asset_path );
+	$frontend_index_js = 'build/index.frontend.js';
+	wp_register_script(
+		'create-block-playlist-block',
+		plugins_url( $frontend_index_js, __FILE__ ),
+		$frontend_asset['dependencies'],
+		$frontend_asset['version']
+	);
+
 	$style_css = 'build/style-index.css';
 	wp_register_style(
 		'create-block-playlist-block',
@@ -60,3 +70,17 @@ function create_block_playlist_block_init() {
 	) );
 }
 add_action( 'init', 'create_block_playlist_block_init' );
+
+// Thanks to https://richtabor.com/has-blocks-gutenberg-scripts/
+// and https://www.npmjs.com/package/@wordpress/scripts#using-css
+function create_block_playlist_block_frontend_script() {
+	if ( has_block( 'create-block/playlist' ) ) {
+		// already registered above, we need to enqueue it on the wp_enqueue_scripts event
+		wp_enqueue_script(
+			'create-block-playlist-block'
+		);
+	}
+}
+// wp_enqueue_scripts is used to enqueue scripts and css on the front end of posts and pages
+add_action( 'wp_enqueue_scripts', 'create_block_playlist_block_frontend_script' );
+

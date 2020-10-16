@@ -17,17 +17,13 @@ import { ReactComponent as PlayButtonImg } from './images/play_button.svg';
  */
 export default function save({ attributes }) {
 	let { audio_url, clips } = attributes;
-	const playFromStart = (node) => {
-		debugger;
-		alert(node);
-	}
 	let r = (
 		<div>
 			<audio controls src={audio_url}></audio>
 			{clips.map((clip, index) => {
 				return (
 					<div class="playlist-clip" data-playlist-clip-start={clip.start} data-playlist-clip-end={clip.end}>
-						<span onclick='alert("boo")'>
+						<span class="play-clip-button">
 							<PlayButtonImg />
 							Start play at: {clip.start}
 						</span>
@@ -37,7 +33,6 @@ export default function save({ attributes }) {
 					</div>
 				)
 			})}
-Test.............
 		</div>
 	);
 	return r;

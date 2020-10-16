@@ -614,12 +614,6 @@ function save(_ref) {
   var attributes = _ref.attributes;
   var audio_url = attributes.audio_url,
       clips = attributes.clips;
-
-  var playFromStart = function playFromStart(node) {
-    debugger;
-    alert(node);
-  };
-
   var r = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("audio", {
     controls: true,
     src: audio_url
@@ -629,11 +623,11 @@ function save(_ref) {
       "data-playlist-clip-start": clip.start,
       "data-playlist-clip-end": clip.end
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("span", {
-      onclick: "alert(\"boo\")"
+      class: "play-clip-button"
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_images_play_button_svg__WEBPACK_IMPORTED_MODULE_2__["ReactComponent"], null), "Start play at: ", clip.start), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       class: "playlist-clip-description"
     }, clip.description));
-  }), "Test.............");
+  }));
   return r;
 }
 

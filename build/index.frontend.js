@@ -1,1 +1,184 @@
-!function(t){var e={};function n(r){if(e[r])return e[r].exports;var a=e[r]={i:r,l:!1,exports:{}};return t[r].call(a.exports,a,a.exports,n),a.l=!0,a.exports}n.m=t,n.c=e,n.d=function(t,e,r){n.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:r})},n.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},n.t=function(t,e){if(1&e&&(t=n(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var r=Object.create(null);if(n.r(r),Object.defineProperty(r,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var a in t)n.d(r,a,function(e){return t[e]}.bind(null,a));return r},n.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return n.d(e,"a",e),e},n.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},n.p="",n(n.s=8)}({1:function(t,e,n){"use strict";function r(t){t.toString().indexOf(":")&&(t=a(t.toString()));var e=(t=parseInt(t))%60,n=parseInt(t/60);return"".concat(n,":").concat(("00"+e.toString()).slice(-2))}function a(t){if(-1==t.indexOf(":"))return parseInt(t);var e=t.split(":"),n=parseInt(e[1]),r=parseInt(e[0]);return isNaN(r)?n:isNaN(n)?60*r:60*r+n}n.d(e,"b",(function(){return r})),n.d(e,"a",(function(){return a}))},8:function(t,e,n){"use strict";n.r(e);var r=n(1);document.addEventListener("DOMContentLoaded",(function(){var t=document.getElementsByClassName("wp-block-create-block-playlist");Array.from(t).forEach((function(t){t.src;var e=t.getElementsByTagName("audio")[0],n=[];e.ontimeupdate=function(){var t=e.currentTime;n.forEach((function(e){e.node.classList.remove("paused"),e.start<=t&&e.end>=t?e.node.classList.add("clip-playing"):e.node.classList.remove("clip-playing")}))},e.onpause=function(){n.forEach((function(t){t.node.classList.add("paused")}))},Array.from(t.getElementsByClassName("playlist-clip")).forEach((function(t){var a=Object(r.a)(t.dataset.playlistClipStart),o=Object(r.a)(t.dataset.playlistClipEnd);n.push({start:a,end:o,node:t}),t.addEventListener("click",(function(){t.classList.contains("clip-playing")?t.classList.contains("paused")?e.play():e.pause():(e.currentTime=a,e.play())}))}))}))}))}});
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/index.frontend.js");
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ "./src/helpers/time_helpers.js":
+/*!*************************************!*\
+  !*** ./src/helpers/time_helpers.js ***!
+  \*************************************/
+/*! exports provided: seconds_to_minutes, minutes_to_seconds */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "seconds_to_minutes", function() { return seconds_to_minutes; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "minutes_to_seconds", function() { return minutes_to_seconds; });
+function seconds_to_minutes(seconds) {
+  if (seconds.toString().indexOf(":")) seconds = minutes_to_seconds(seconds.toString());
+  seconds = parseInt(seconds);
+  var sec = seconds % 60;
+  var min = parseInt(seconds / 60);
+  return "".concat(min, ":").concat(("00" + sec.toString()).slice(-2));
+}
+function minutes_to_seconds(minutes_string) {
+  if (minutes_string.indexOf(":") == -1) return parseInt(minutes_string);
+  var parts = minutes_string.split(":");
+  var sec = parseInt(parts[1]);
+  var min = parseInt(parts[0]);
+  if (isNaN(min)) return sec;
+  if (isNaN(sec)) return min * 60;
+  return min * 60 + sec;
+}
+
+/***/ }),
+
+/***/ "./src/index.frontend.js":
+/*!*******************************!*\
+  !*** ./src/index.frontend.js ***!
+  \*******************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _helpers_time_helpers_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./helpers/time_helpers.js */ "./src/helpers/time_helpers.js");
+// This script is for the frontend of the playlist block
+
+document.addEventListener("DOMContentLoaded", function () {
+  var playlists = document.getElementsByClassName("wp-block-create-block-playlist");
+  Array.from(playlists).forEach(function (playlist_node) {
+    var url = playlist_node.src;
+    var player = playlist_node.getElementsByTagName("audio")[0];
+    var playlist = [];
+
+    player.ontimeupdate = function () {
+      var currentTime = player.currentTime;
+      playlist.forEach(function (record) {
+        record.node.classList.remove("paused");
+
+        if (record.start <= currentTime && record.end >= currentTime) {
+          record.node.classList.add("clip-playing");
+        } else {
+          record.node.classList.remove("clip-playing");
+        }
+
+        ;
+      });
+    };
+
+    player.onpause = function () {
+      playlist.forEach(function (record) {
+        record.node.classList.add("paused");
+      });
+    };
+
+    Array.from(playlist_node.getElementsByClassName("playlist-clip")).forEach(function (clip_node) {
+      var start = Object(_helpers_time_helpers_js__WEBPACK_IMPORTED_MODULE_0__["minutes_to_seconds"])(clip_node.dataset.playlistClipStart);
+      var end = Object(_helpers_time_helpers_js__WEBPACK_IMPORTED_MODULE_0__["minutes_to_seconds"])(clip_node.dataset.playlistClipEnd);
+      playlist.push({
+        start: start,
+        end: end,
+        node: clip_node
+      });
+      clip_node.addEventListener("click", function () {
+        if (!clip_node.classList.contains('clip-playing')) {
+          player.currentTime = start;
+          player.play();
+        } else if (clip_node.classList.contains('paused')) {
+          player.play();
+        } else {
+          player.pause();
+        }
+      });
+    });
+  });
+});
+
+/***/ })
+
+/******/ });
+//# sourceMappingURL=index.frontend.js.map

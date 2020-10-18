@@ -60,8 +60,13 @@ export default function Edit({ attributes, className, setAttributes }) {
 				value={audio_url}
 				onChange={setAudioUrl}
 			/>
-			<audio controls src={attributes.audio_url} ref={setPlayer}></audio>
-			<button onClick={addClip}>Add Clip</button>
+			<div class="audio_controls">
+				<audio controls src={attributes.audio_url} ref={setPlayer}></audio>
+				<button class="back-5" onClick={() => { player.currentTime = player.currentTime - 5; }}>&lt;&lt; 5</button>
+				<button class="back-30" onClick={() => { player.currentTime = player.currentTime - 30; }}>&lt;&lt; 30</button>
+				<button class="forward-5" onClick={() => { player.currentTime = player.currentTime + 5; }}>&gt;&gt; 5</button>
+				<button onClick={addClip}>Add Clip</button>
+			</div>
 			{clips.map((clip, clip_index) =>
 				<div class="playlist-clip">
 					<div class="start-field">

@@ -1,2 +1,25 @@
-.wp-block-create-block-playlist{border:1px solid #f00}.playlist-clip{border-bottom:1px dotted #f00}.start-field{display:inline-block}.start-field .components-base-control__label{display:block}.end-field{display:inline-block}.end-field .components-base-control__label{display:block}
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+.wp-block-create-block-playlist {
+  border: 1px solid #f00; }
+  .wp-block-create-block-playlist button {
+    border-radius: 10px; }
 
+.playlist-clip {
+  border-bottom: 1px dotted #f00; }
+
+.start-field {
+  display: inline-block; }
+  .start-field .components-base-control__label {
+    display: block; }
+
+.end-field {
+  display: inline-block; }
+  .end-field .components-base-control__label {
+    display: block; }
+
+
+/*# sourceMappingURL=index.css.map*/

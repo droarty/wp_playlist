@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:     Playlist
- * Description:     Example block written with ESNext standard and JSX support – build step required.
+ * Description:     Use this plugin to annotate and play clips from an audio file.
  * Version:         0.1.0
  * Author:          The WordPress Contributors
  * License:         GPL-2.0-or-later

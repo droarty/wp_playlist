@@ -1,7 +1,7 @@
 {
 	"name": "playlist",
 	"version": "0.1.0",
-	"description": "Example block written with ESNext standard and JSX support – build step required.",
+	"description": "Use this plugin to annotate and play clips from an audio file",
 	"author": "The WordPress Contributors",
 	"license": "GPL-2.0-or-later",
 	"main": "build/index.js",

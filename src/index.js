@@ -44,7 +44,7 @@ registerBlockType('create-block/playlist', {
 	 * It will be shown in the Block Tab in the Settings Sidebar.
 	 */
 	description: __(
-		'Example block written with ESNext standard and JSX support – build step required.',
+		'Use this plugin to annotate and play clips from an audio file.',
 		'playlist'
 	),
 

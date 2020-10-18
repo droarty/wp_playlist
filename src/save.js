@@ -4,7 +4,8 @@
  * @see https://developer.wordpress.org/block-editor/packages/packages-i18n/
  */
 import { __ } from '@wordpress/i18n';
-import { ReactComponent as PlayButtonImg } from './images/play_button.svg';
+import { ReactComponent as PlayButtonImg } from './images/play-button.svg';
+import { ReactComponent as PauseButtonImg } from './images/pause-button.svg';
 
 /**
  * The save function defines the way in which the different attributes should
@@ -24,7 +25,8 @@ export default function save({ attributes }) {
 				return (
 					<div class="playlist-clip" data-playlist-clip-start={clip.start} data-playlist-clip-end={clip.end}>
 						<span class="play-clip-button">
-							<PlayButtonImg />
+							<PlayButtonImg class="play-button" />
+							<PauseButtonImg class="pause-button" />
 							Start play at: {clip.start}
 						</span>
 						<div class="playlist-clip-description">

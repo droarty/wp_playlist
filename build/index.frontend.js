@@ -86,23 +86,93 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./src/helpers/time_helpers.js":
+/*!*************************************!*\
+  !*** ./src/helpers/time_helpers.js ***!
+  \*************************************/
+/*! exports provided: seconds_to_minutes, minutes_to_seconds */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "seconds_to_minutes", function() { return seconds_to_minutes; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "minutes_to_seconds", function() { return minutes_to_seconds; });
+function seconds_to_minutes(seconds) {
+  if (seconds.toString().indexOf(":")) seconds = minutes_to_seconds(seconds.toString());
+  seconds = parseInt(seconds);
+  var sec = seconds % 60;
+  var min = parseInt(seconds / 60);
+  return "".concat(min, ":").concat(("00" + sec.toString()).slice(-2));
+}
+function minutes_to_seconds(minutes_string) {
+  if (minutes_string.indexOf(":") == -1) return parseInt(minutes_string);
+  var parts = minutes_string.split(":");
+  var sec = parseInt(parts[1]);
+  var min = parseInt(parts[0]);
+  if (isNaN(min)) return sec;
+  if (isNaN(sec)) return min * 60;
+  return min * 60 + sec;
+}
+
+/***/ }),
+
 /***/ "./src/index.frontend.js":
 /*!*******************************!*\
   !*** ./src/index.frontend.js ***!
   \*******************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _helpers_time_helpers_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./helpers/time_helpers.js */ "./src/helpers/time_helpers.js");
 // This script is for the frontend of the playlist block
+
 document.addEventListener("DOMContentLoaded", function () {
   var playlists = document.getElementsByClassName("wp-block-create-block-playlist");
   Array.from(playlists).forEach(function (playlist_node) {
     var url = playlist_node.src;
+    var player = playlist_node.getElementsByTagName("audio")[0];
+    var playlist = [];
+
+    player.ontimeupdate = function () {
+      var currentTime = player.currentTime;
+      playlist.forEach(function (record) {
+        record.node.classList.remove("paused");
+
+        if (record.start <= currentTime && record.end >= currentTime) {
+          record.node.classList.add("clip-playing");
+        } else {
+          record.node.classList.remove("clip-playing");
+        }
+
+        ;
+      });
+    };
+
+    player.onpause = function () {
+      playlist.forEach(function (record) {
+        record.node.classList.add("paused");
+      });
+    };
+
     Array.from(playlist_node.getElementsByClassName("playlist-clip")).forEach(function (clip_node) {
-      var start = clip_node.dataset.playlistClipStart;
-      var end = clip_node.dataset.playlistClipEnd;
+      var start = Object(_helpers_time_helpers_js__WEBPACK_IMPORTED_MODULE_0__["minutes_to_seconds"])(clip_node.dataset.playlistClipStart);
+      var end = Object(_helpers_time_helpers_js__WEBPACK_IMPORTED_MODULE_0__["minutes_to_seconds"])(clip_node.dataset.playlistClipEnd);
+      playlist.push({
+        start: start,
+        end: end,
+        node: clip_node
+      });
       clip_node.addEventListener("click", function () {
-        alert("".concat(start, ", ").concat(end));
+        if (!clip_node.classList.contains('clip-playing')) {
+          player.currentTime = start;
+          player.play();
+        } else if (clip_node.classList.contains('paused')) {
+          player.play();
+        } else {
+          player.pause();
+        }
       });
     });
   });

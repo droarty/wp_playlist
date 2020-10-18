@@ -303,6 +303,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_editor_scss__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _helpers_time_helpers_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./helpers/time_helpers.js */ "./src/helpers/time_helpers.js");
 
 
 
@@ -333,12 +334,16 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 
+
+
 function Edit(_ref) {
   var attributes = _ref.attributes,
       className = _ref.className,
       setAttributes = _ref.setAttributes;
   var audio_url = attributes.audio_url,
       clips = attributes.clips;
+  if (!clips) clips = [];
+  var player = 0;
 
   var setAudioUrl = function setAudioUrl(val) {
     audio_url = val;
@@ -347,7 +352,12 @@ function Edit(_ref) {
     });
   };
 
+  var setPlayer = function setPlayer(audio_element) {
+    player = audio_element;
+  };
+
   var setClip = function setClip(label, index, value) {
+    if (["start", "end"].includes(label) && value.indexOf(" ") > -1) value = Object(_helpers_time_helpers_js__WEBPACK_IMPORTED_MODULE_5__["seconds_to_minutes"])(parseInt(player.currentTime));
     var new_clips = [];
     clips[index][label] = value;
     clips.forEach(function (element) {
@@ -361,8 +371,8 @@ function Edit(_ref) {
   var addClip = function addClip() {
     setAttributes({
       clips: [].concat(_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default()(clips), [{
-        start: "0",
-        end: "0",
+        start: "0:00",
+        end: "0:00",
         description: ""
       }])
     });
@@ -370,29 +380,38 @@ function Edit(_ref) {
 
   return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])("p", {
     className: className
-  }, "Attributes: ", JSON.stringify(attributes), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["TextControl"], {
+  }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["TextControl"], {
     label: "Audio URL",
     value: audio_url,
     onChange: setAudioUrl
   }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])("audio", {
     controls: true,
-    src: attributes.audio_url
+    src: attributes.audio_url,
+    ref: setPlayer
   }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])("button", {
     onClick: addClip
   }, "Add Clip"), clips.map(function (clip, clip_index) {
-    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])("div", null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["TextControl"], {
-      label: "Clip Start",
+    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])("div", {
+      class: "playlist-clip"
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])("div", {
+      class: "start-field"
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["TextControl"], {
+      label: "Clip Start (".concat(Object(_helpers_time_helpers_js__WEBPACK_IMPORTED_MODULE_5__["seconds_to_minutes"])(clip.start), ")"),
       value: clip.start,
       onChange: function onChange(val) {
         setClip("start", clip_index, val);
       }
-    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["TextControl"], {
-      label: "Clip End",
+    })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])("div", {
+      class: "end-field"
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["TextControl"], {
+      label: "Clip End (".concat(Object(_helpers_time_helpers_js__WEBPACK_IMPORTED_MODULE_5__["seconds_to_minutes"])(clip.end), ")"),
       value: clip.end,
       onChange: function onChange(val) {
         setClip("end", clip_index, val);
       }
-    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["TextControl"], {
+    })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])("div", {
+      class: "end-field"
+    }, "Press space bar to enter current time."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["TextareaControl"], {
       label: "Clip Description",
       value: clip.description,
       onChange: function onChange(val) {
@@ -415,9 +434,74 @@ function Edit(_ref) {
 
 /***/ }),
 
-/***/ "./src/images/play_button.svg":
+/***/ "./src/helpers/time_helpers.js":
+/*!*************************************!*\
+  !*** ./src/helpers/time_helpers.js ***!
+  \*************************************/
+/*! exports provided: seconds_to_minutes, minutes_to_seconds */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "seconds_to_minutes", function() { return seconds_to_minutes; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "minutes_to_seconds", function() { return minutes_to_seconds; });
+function seconds_to_minutes(seconds) {
+  if (seconds.toString().indexOf(":")) seconds = minutes_to_seconds(seconds.toString());
+  seconds = parseInt(seconds);
+  var sec = seconds % 60;
+  var min = parseInt(seconds / 60);
+  return "".concat(min, ":").concat(("00" + sec.toString()).slice(-2));
+}
+function minutes_to_seconds(minutes_string) {
+  if (minutes_string.indexOf(":") == -1) return parseInt(minutes_string);
+  var parts = minutes_string.split(":");
+  var sec = parseInt(parts[1]);
+  var min = parseInt(parts[0]);
+  if (isNaN(min)) return sec;
+  if (isNaN(sec)) return min * 60;
+  return min * 60 + sec;
+}
+
+/***/ }),
+
+/***/ "./src/images/pause-button.svg":
+/*!*************************************!*\
+  !*** ./src/images/pause-button.svg ***!
+  \*************************************/
+/*! exports provided: default, ReactComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ReactComponent", function() { return SvgPauseButton; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+
+
+var _ref = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("path", {
+  d: "M413.974 71.026C368.171 25.225 307.274 0 242.5 0S116.829 25.225 71.026 71.026C25.225 116.829 0 177.726 0 242.5s25.225 125.671 71.026 171.474C116.829 459.775 177.726 485 242.5 485s125.671-25.225 171.474-71.026C459.775 368.171 485 307.274 485 242.5s-25.225-125.671-71.026-171.474zM242.5 455C125.327 455 30 359.673 30 242.5S125.327 30 242.5 30 455 125.327 455 242.5 359.673 455 242.5 455z"
+});
+
+var _ref2 = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("path", {
+  d: "M172.5 140h55v205h-55zM257.5 140h55v205h-55z"
+});
+
+function SvgPauseButton(props) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("svg", _extends({
+    viewBox: "0 0 485 485"
+  }, props), _ref, _ref2);
+}
+
+/* harmony default export */ __webpack_exports__["default"] = ("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCINCgkgdmlld0JveD0iMCAwIDQ4NSA0ODUiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDQ4NSA0ODU7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCgk8Zz4NCgkJPHBhdGggZD0iTTQxMy45NzQsNzEuMDI2QzM2OC4xNzEsMjUuMjI1LDMwNy4yNzQsMCwyNDIuNSwwUzExNi44MjksMjUuMjI1LDcxLjAyNiw3MS4wMjZDMjUuMjI1LDExNi44MjksMCwxNzcuNzI2LDAsMjQyLjUNCgkJCXMyNS4yMjUsMTI1LjY3MSw3MS4wMjYsMTcxLjQ3NEMxMTYuODI5LDQ1OS43NzUsMTc3LjcyNiw0ODUsMjQyLjUsNDg1czEyNS42NzEtMjUuMjI1LDE3MS40NzQtNzEuMDI2DQoJCQlDNDU5Ljc3NSwzNjguMTcxLDQ4NSwzMDcuMjc0LDQ4NSwyNDIuNVM0NTkuNzc1LDExNi44MjksNDEzLjk3NCw3MS4wMjZ6IE0yNDIuNSw0NTVDMTI1LjMyNyw0NTUsMzAsMzU5LjY3MywzMCwyNDIuNQ0KCQkJUzEyNS4zMjcsMzAsMjQyLjUsMzBTNDU1LDEyNS4zMjcsNDU1LDI0Mi41UzM1OS42NzMsNDU1LDI0Mi41LDQ1NXoiLz4NCgkJPHJlY3QgeD0iMTcyLjUiIHk9IjE0MCIgd2lkdGg9IjU1IiBoZWlnaHQ9IjIwNSIvPg0KCQk8cmVjdCB4PSIyNTcuNSIgeT0iMTQwIiB3aWR0aD0iNTUiIGhlaWdodD0iMjA1Ii8+DQoJPC9nPg0KPC9zdmc+DQo=");
+
+
+/***/ }),
+
+/***/ "./src/images/play-button.svg":
 /*!************************************!*\
-  !*** ./src/images/play_button.svg ***!
+  !*** ./src/images/play-button.svg ***!
   \************************************/
 /*! exports provided: default, ReactComponent */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -432,19 +516,20 @@ function _extends() { _extends = Object.assign || function (target) { for (var i
 
 
 var _ref = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("path", {
-  d: "M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm0 1.5a8.5 8.5 0 100 17 8.5 8.5 0 000-17zM9.053 8.585a.5.5 0 01.587-.256l.084.033 6.382 3.19a.5.5 0 01.076.848l-.076.047-6.382 3.191a.5.5 0 01-.716-.357L9 15.19V8.809a.5.5 0 01.053-.224z",
-  fill: "#212121",
-  fillRule: "nonzero"
+  d: "M413.974 71.026C368.171 25.225 307.274 0 242.5 0S116.829 25.225 71.026 71.026C25.225 116.829 0 177.726 0 242.5s25.225 125.671 71.026 171.474C116.829 459.775 177.726 485 242.5 485s125.671-25.225 171.474-71.026C459.775 368.171 485 307.274 485 242.5s-25.225-125.671-71.026-171.474zM242.5 455C125.327 455 30 359.673 30 242.5S125.327 30 242.5 30 455 125.327 455 242.5 359.673 455 242.5 455z"
+});
+
+var _ref2 = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("path", {
+  d: "M181.062 336.575L343.938 242.5l-162.876-94.075z"
 });
 
 function SvgPlayButton(props) {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("svg", _extends({
-    width: 24,
-    height: 24
-  }, props), _ref);
+    viewBox: "0 0 485 485"
+  }, props), _ref, _ref2);
 }
 
-/* harmony default export */ __webpack_exports__["default"] = ("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iMjRweCIgaGVpZ2h0PSIyNHB4IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8IS0tIFVwbG9hZGVkIHRvIFNWR1JlcG8gaHR0cHM6Ly93d3cuc3ZncmVwby5jb20gLS0+CiAgICA8dGl0bGU+aWNfZmx1ZW50X3BsYXlfY2lyY2xlXzI0X3JlZ3VsYXI8L3RpdGxlPgogICAgPGRlc2M+Q3JlYXRlZCB3aXRoIFNrZXRjaC48L2Rlc2M+CiAgICA8ZyBpZD0i8J+UjS1TeXN0ZW0tSWNvbnMiIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPgogICAgICAgIDxnIGlkPSJpY19mbHVlbnRfcGxheV9jaXJjbGVfMjRfcmVndWxhciIgZmlsbD0iIzIxMjEyMSIgZmlsbC1ydWxlPSJub256ZXJvIj4KICAgICAgICAgICAgPHBhdGggZD0iTTEyLDIgQzE3LjUyMjg0NzUsMiAyMiw2LjQ3NzE1MjUgMjIsMTIgQzIyLDE3LjUyMjg0NzUgMTcuNTIyODQ3NSwyMiAxMiwyMiBDNi40NzcxNTI1LDIyIDIsMTcuNTIyODQ3NSAyLDEyIEMyLDYuNDc3MTUyNSA2LjQ3NzE1MjUsMiAxMiwyIFogTTEyLDMuNSBDNy4zMDU1Nzk2MywzLjUgMy41LDcuMzA1NTc5NjMgMy41LDEyIEMzLjUsMTYuNjk0NDIwNCA3LjMwNTU3OTYzLDIwLjUgMTIsMjAuNSBDMTYuNjk0NDIwNCwyMC41IDIwLjUsMTYuNjk0NDIwNCAyMC41LDEyIEMyMC41LDcuMzA1NTc5NjMgMTYuNjk0NDIwNCwzLjUgMTIsMy41IFogTTkuMDUyNzg2NCw4LjU4NTQxMDIgQzkuMTYyNTU5NCw4LjM2NTg2NDIgOS40MTIwNTkzMyw4LjI2MjM2OTIyIDkuNjM5NjE2OTgsOC4zMjg4MTUgTDkuNzIzNjA2OCw4LjM2MTgwMzQgTDE2LjEwNTU3MjgsMTEuNTUyNzg2NCBDMTYuMjAyMzM2NSwxMS42MDExNjgzIDE2LjI4MDc5NzgsMTEuNjc5NjI5NSAxNi4zMjkxNzk2LDExLjc3NjM5MzIgQzE2LjQzODk1MjYsMTEuOTk1OTM5MiAxNi4zNzIwNDg2LDEyLjI1NzYzNjEgMTYuMTgyMzU3NCwxMi4zOTk4MTQ4IEwxNi4xMDU1NzI4LDEyLjQ0NzIxMzYgTDkuNzIzNjA2OCwxNS42MzgxOTY2IEM5LjY1NDE3OTA4LDE1LjY3MjkxMDUgOS41Nzc2MjI1NSwxNS42OTA5ODMgOS41LDE1LjY5MDk4MyBDOS4yNTQ1NDAxMSwxNS42OTA5ODMgOS4wNTAzOTE2MywxNS41MTQxMDc4IDkuMDA4MDU1NjcsMTUuMjgwODU4NiBMOSwxNS4xOTA5ODMgTDksOC44MDkwMTY5OSBDOSw4LjczMTM5NDQ1IDkuMDE4MDcyNTUsOC42NTQ4Mzc5MSA5LjA1Mjc4NjQsOC41ODU0MTAyIFoiIGlkPSLwn46oLUNvbG9yIj48L3BhdGg+CiAgICAgICAgPC9nPgogICAgPC9nPgo8L3N2Zz4=");
+/* harmony default export */ __webpack_exports__["default"] = ("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCINCgkgdmlld0JveD0iMCAwIDQ4NSA0ODUiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDQ4NSA0ODU7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCgk8Zz4NCgkJPHBhdGggZD0iTTQxMy45NzQsNzEuMDI2QzM2OC4xNzEsMjUuMjI1LDMwNy4yNzQsMCwyNDIuNSwwUzExNi44MjksMjUuMjI1LDcxLjAyNiw3MS4wMjZDMjUuMjI1LDExNi44MjksMCwxNzcuNzI2LDAsMjQyLjUNCgkJCXMyNS4yMjUsMTI1LjY3MSw3MS4wMjYsMTcxLjQ3NEMxMTYuODI5LDQ1OS43NzUsMTc3LjcyNiw0ODUsMjQyLjUsNDg1czEyNS42NzEtMjUuMjI1LDE3MS40NzQtNzEuMDI2DQoJCQlDNDU5Ljc3NSwzNjguMTcxLDQ4NSwzMDcuMjc0LDQ4NSwyNDIuNVM0NTkuNzc1LDExNi44MjksNDEzLjk3NCw3MS4wMjZ6IE0yNDIuNSw0NTVDMTI1LjMyNyw0NTUsMzAsMzU5LjY3MywzMCwyNDIuNQ0KCQkJUzEyNS4zMjcsMzAsMjQyLjUsMzBTNDU1LDEyNS4zMjcsNDU1LDI0Mi41UzM1OS42NzMsNDU1LDI0Mi41LDQ1NXoiLz4NCgkJPHBvbHlnb24gcG9pbnRzPSIxODEuMDYyLDMzNi41NzUgMzQzLjkzOCwyNDIuNSAxODEuMDYyLDE0OC40MjUgCSIvPg0KCTwvZz4NCjwvc3ZnPg0K");
 
 
 /***/ }),
@@ -590,7 +675,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _images_play_button_svg__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./images/play_button.svg */ "./src/images/play_button.svg");
+/* harmony import */ var _images_play_button_svg__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./images/play-button.svg */ "./src/images/play-button.svg");
+/* harmony import */ var _images_pause_button_svg__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./images/pause-button.svg */ "./src/images/pause-button.svg");
 
 
 /**
@@ -598,6 +684,7 @@ __webpack_require__.r(__webpack_exports__);
  *
  * @see https://developer.wordpress.org/block-editor/packages/packages-i18n/
  */
+
 
 
 /**
@@ -624,7 +711,11 @@ function save(_ref) {
       "data-playlist-clip-end": clip.end
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("span", {
       class: "play-clip-button"
-    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_images_play_button_svg__WEBPACK_IMPORTED_MODULE_2__["ReactComponent"], null), "Start play at: ", clip.start), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_images_play_button_svg__WEBPACK_IMPORTED_MODULE_2__["ReactComponent"], {
+      class: "play-button"
+    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_images_pause_button_svg__WEBPACK_IMPORTED_MODULE_3__["ReactComponent"], {
+      class: "pause-button"
+    }), "Start play at: ", clip.start), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       class: "playlist-clip-description"
     }, clip.description));
   }));

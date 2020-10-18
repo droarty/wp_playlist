@@ -12,7 +12,7 @@
 		"lint:js": "wp-scripts lint-js",
 		"start": "wp-scripts start src/index.frontend.js src/index.js --output-path=build",
 		"packages-update": "wp-scripts packages-update",
-		"zip": "zip -r9 playlist.zip . -x *.git* node_modules/\*"
+		"zip": "zip -r9 playlist.zip . -x *.git* node_modules/\\*"
 	},
 	"devDependencies": {
 		"@wordpress/scripts": "^12.3.0"

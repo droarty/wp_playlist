@@ -63,7 +63,6 @@ export default function Edit({ attributes, className, setAttributes }) {
 			<div class="audio_controls">
 				<audio controls src={attributes.audio_url} ref={setPlayer}></audio>
 				<button class="back-5" onClick={() => { player.currentTime = player.currentTime - 5; }}>&lt;&lt; 5</button>
-				<button class="back-30" onClick={() => { player.currentTime = player.currentTime - 30; }}>&lt;&lt; 30</button>
 				<button class="forward-5" onClick={() => { player.currentTime = player.currentTime + 5; }}>&gt;&gt; 5</button>
 				<button onClick={addClip}>Add Clip</button>
 			</div>

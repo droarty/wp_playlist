@@ -4,8 +4,11 @@ import { seconds_to_minutes, minutes_to_seconds } from './helpers/time_helpers.j
 document.addEventListener("DOMContentLoaded", function () {
 	const playlists = document.getElementsByClassName("wp-block-create-block-playlist");
 	Array.from(playlists).forEach(playlist_node => {
+		Array.from(playlist_node.getElementsByTagName("a")).forEach(anchor => anchor.setAttribute("target", "_blank"));
 		const url = playlist_node.src;
 		const player = playlist_node.getElementsByTagName("audio")[0];
+		playlist_node.getElementsByClassName("back-5")[0].onclick = () => { player.currentTime = player.currentTime - 5; };
+		playlist_node.getElementsByClassName("forward-5")[0].onclick = () => { player.currentTime = player.currentTime + 5; };
 		const playlist = [];
 		player.ontimeupdate = () => {
 			const currentTime = player.currentTime;

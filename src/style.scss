@@ -18,6 +18,15 @@
 		}
 	}
 
+	.audio_controls {
+		display: flex;
+		align-items: center;
+		svg {
+			width: 18px;
+			margin: auto 10px;
+		}
+	}
+
 	.playlist-clip {
 		border-left: none;
 		padding-left: 10px;
@@ -37,6 +46,10 @@
 			}
 			opacity: 1.0;;
 		}
+	}
+
+	.rewind-button {
+		transform: rotate(180deg);
 	}
 
 	.pause-button {

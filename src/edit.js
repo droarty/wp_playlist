@@ -62,8 +62,8 @@ export default function Edit({ attributes, className, setAttributes }) {
 			/>
 			<div class="audio_controls">
 				<audio controls src={attributes.audio_url} ref={setPlayer}></audio>
-				<button class="back-5" onClick={() => { player.currentTime = player.currentTime - 5; }}>&lt;&lt; 5</button>
-				<button class="forward-5" onClick={() => { player.currentTime = player.currentTime + 5; }}>&gt;&gt; 5</button>
+				<a class="back-5" onClick={() => { player.currentTime = player.currentTime - 5; }}>&lt;&lt; 5</a>&nbsp;&nbsp;
+				<a class="forward-5" onClick={() => { player.currentTime = player.currentTime + 5; }}>&gt;&gt; 5</a>
 				<button onClick={addClip}>Add Clip</button>
 			</div>
 			{clips.map((clip, clip_index) =>
@@ -86,7 +86,7 @@ export default function Edit({ attributes, className, setAttributes }) {
 						Press space bar to enter current time.
 					</div>
 					<TextareaControl
-						label="Clip Description"
+						label="Clip Description (markdown compatible)"
 						value={clip.description}
 						onChange={val => { setClip("description", clip_index, val) }}
 					/>

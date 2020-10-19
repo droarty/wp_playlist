@@ -39,7 +39,7 @@ export default function save({ attributes }) {
 							{clip.description}
 						</div>
 						<div class="playlist-clip-description-visible">
-							<Markdown>{clip.description}</Markdown>
+							<Markdown >{clip.description}</Markdown>
 						</div>
 					</div>
 				)

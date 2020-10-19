@@ -11,6 +11,11 @@
 	}
 }
 
+.top-row {
+	display: flex;
+	gap: 5px;
+	font-size: 15px;
+}
 .playlist-clip {
 	border-bottom: 1px dotted #f00;
 }

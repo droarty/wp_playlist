@@ -28,6 +28,8 @@ import './editor.scss';
 import { TextControl } from '@wordpress/components';
 import { TextareaControl } from '@wordpress/components';
 import { seconds_to_minutes, minutes_to_seconds } from './helpers/time_helpers.js'
+import { element } from 'prop-types';
+import Markdown from 'markdown-to-jsx';
 
 export default function Edit({ attributes, className, setAttributes }) {
 	let { audio_url, clips } = attributes;
@@ -50,7 +52,16 @@ export default function Edit({ attributes, className, setAttributes }) {
 		setAttributes({ clips: new_clips });
 	}
 	const addClip = () => {
-		setAttributes({ clips: [...clips, { start: "0:00", end: "0:00", description: "" }] })
+		const start_time = seconds_to_minutes(player.currentTime);
+		setAttributes({ clips: [...clips, { start: start_time, end: start_time, description: "" }] })
+	}
+	const deleteClip = (index) => {
+		if (confirm("Really delete this clip?")) {
+			let new_clips = [];
+			clips.splice(index, 1);
+			clips.forEach(element => { new_clips.push(element) })
+			setAttributes({ new_clips });
+		}
 	}
 
 	return (
@@ -60,38 +71,41 @@ export default function Edit({ attributes, className, setAttributes }) {
 				value={audio_url}
 				onChange={setAudioUrl}
 			/>
-			<div class="audio_controls">
-				<audio controls src={attributes.audio_url} ref={setPlayer}></audio>
-				<a class="back-5" onClick={() => { player.currentTime = player.currentTime - 5; }}>&lt;&lt; 5</a>&nbsp;&nbsp;
-				<a class="forward-5" onClick={() => { player.currentTime = player.currentTime + 5; }}>&gt;&gt; 5</a>
-				<button onClick={addClip}>Add Clip</button>
-			</div>
 			{clips.map((clip, clip_index) =>
 				<div class="playlist-clip">
-					<div class="start-field">
-						<TextControl
-							label={`Clip Start (${seconds_to_minutes(clip.start)})`}
-							value={clip.start}
-							onChange={val => { setClip("start", clip_index, val) }}
-						/>
-					</div>
-					<div class="end-field">
-						<TextControl
-							label={`Clip End (${seconds_to_minutes(clip.end)})`}
-							value={clip.end}
-							onChange={val => { setClip("end", clip_index, val) }}
-						/>
-					</div>
-					<div class="end-field">
-						Press space bar to enter current time.
+					<div class="top-row">
+						<div class="start-field">
+							<TextControl
+								label={`Clip Start (${seconds_to_minutes(clip.start)})`}
+								value={clip.start}
+								onChange={val => { setClip("start", clip_index, val) }}
+							/>
+						</div>
+						<div class="end-field">
+							<TextControl
+								label={`Clip End (${seconds_to_minutes(clip.end)})`}
+								value={clip.end}
+								onChange={val => { setClip("end", clip_index, val) }}
+							/>
+						</div>
+						<div class="end-field">
+							<a onClick={() => { deleteClip(clip_index); }}>Delete Clip</a><br />Press space bar to enter current time.
+						</div>
 					</div>
 					<TextareaControl
 						label="Clip Description (markdown compatible)"
 						value={clip.description}
 						onChange={val => { setClip("description", clip_index, val) }}
 					/>
+					<Markdown>{clip.description}</Markdown>
 				</div>
 			)}
+			<div class="audio_controls">
+				<audio controls src={attributes.audio_url} ref={setPlayer}></audio>
+				<a class="back-5" onClick={() => { player.currentTime = player.currentTime - 5; }}>&lt;&lt; 5</a>&nbsp;&nbsp;
+				<a class="forward-5" onClick={() => { player.currentTime = player.currentTime + 5; }}>&gt;&gt; 5</a>
+				<button onClick={addClip}>Add Clip</button>
+			</div>
 		</p>
 	);
 }

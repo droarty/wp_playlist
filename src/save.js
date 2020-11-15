@@ -22,7 +22,7 @@ export default function save({ attributes }) {
 	let { audio_url, clips } = attributes;
 	let r = (
 		<div>
-			<div class="audio_controls">
+			<div class="audio-controls">
 				<audio controls src={audio_url}></audio>
 				<span class="back-5" title="rewind 5 seconds"><FFButtonImg class="rewind-button"></FFButtonImg></span>
 				<span class="forward-5" title="fforward 5 seconds"><FFButtonImg></FFButtonImg></span>
@@ -33,7 +33,9 @@ export default function save({ attributes }) {
 						<span class="play-clip-button">
 							<PlayButtonImg class="play-button" />
 							<PauseButtonImg class="pause-button" />
-							Start play: {clip.start} to {clip.end}
+							<span class="pause-play">Pause </span>
+							<span class="start-play">Start </span>
+							play: {clip.start} to {clip.end}
 						</span>
 						<div class="playlist-clip-description" hidden>
 							{clip.description}

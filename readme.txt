@@ -27,4 +27,10 @@ This plugin lets you list, annotate, and play clips from any audio file that can
 
 == Arbitrary section ==
 
+Run mamp
+go to localhost:8888
+after editing run `yarn start`
+
+when done run `yarn build` and zip.
 To zip from within the playlist folder: zip -r9 playlist.zip . -x *.git* node_modules/\*
+

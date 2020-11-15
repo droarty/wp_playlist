@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	Array.from(playlists).forEach(playlist_node => {
 		Array.from(playlist_node.getElementsByTagName("a")).forEach(anchor => anchor.setAttribute("target", "_blank"));
 		const url = playlist_node.src;
+		const audioControls = playlist_node.getElementsByClassName("audio-controls")
 		const player = playlist_node.getElementsByTagName("audio")[0];
 		playlist_node.getElementsByClassName("back-5")[0].onclick = () => { player.currentTime = player.currentTime - 5; };
 		playlist_node.getElementsByClassName("forward-5")[0].onclick = () => { player.currentTime = player.currentTime + 5; };
@@ -14,10 +15,11 @@ document.addEventListener("DOMContentLoaded", function () {
 			const currentTime = player.currentTime;
 			playlist.forEach(record => {
 				record.node.classList.remove("paused");
-				if (record.start <= currentTime && record.end >= currentTime) {
+				if (record.start <= currentTime && record.end >= currentTime && !record.node.classList.contains("clip-playing")) {
 					record.node.classList.add("clip-playing");
+					playlist_node.insertBefore(audioControls[0], record.node)
 				}
-				else {
+				if (record.start > currentTime || record.end < currentTime) {
 					record.node.classList.remove("clip-playing");
 				};
 			});
@@ -25,6 +27,13 @@ document.addEventListener("DOMContentLoaded", function () {
 		player.onpause = () => {
 			playlist.forEach(record => {
 				record.node.classList.add("paused");
+			});
+		}
+
+		player.onplay = () => {
+			Array.from(playlists).forEach(playlist_node => {
+				const otherPlayer = playlist_node.getElementsByTagName("audio")[0];
+				if (player != otherPlayer && otherPlayer) otherPlayer.pause();
 			});
 		}
 

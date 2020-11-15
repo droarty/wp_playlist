@@ -6,7 +6,8 @@
  */
 
 .wp-block-create-block-playlist {
-	border: thin solid var(--wp-admin-theme-color);
+	border: thin solid lightgray;
+	border-radius: 30px;
 	padding: 5px;
 
 	.playlist-clip .play-clip-button {
@@ -18,7 +19,7 @@
 		}
 	}
 
-	.audio_controls {
+	.audio-controls {
 		display: flex;
 		align-items: center;
 		svg {
@@ -32,9 +33,15 @@
 		padding-left: 10px;
 		.play-clip-button {
 			svg {
-				opacity: 0.3;
+				opacity: 1.0;
 			}
 			opacity: 0.3;
+		}
+		.start-play {
+			display: inline;
+		}
+		.pause-play {
+			display: none;
 		}
 	}
 	.playlist-clip.clip-playing {
@@ -45,6 +52,12 @@
 				opacity: 1.0;
 			}
 			opacity: 1.0;;
+		}
+		.start-play {
+			display: none;
+		}
+		.pause-play {
+			display: inline;
 		}
 	}
 

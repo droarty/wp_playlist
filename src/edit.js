@@ -27,6 +27,7 @@ import './editor.scss';
 
 import { TextControl } from '@wordpress/components';
 import { TextareaControl } from '@wordpress/components';
+import { ReactComponent as PlayButtonImg } from './images/play-button.svg';
 import { seconds_to_minutes, minutes_to_seconds } from './helpers/time_helpers.js'
 import { element } from 'prop-types';
 import Markdown from 'markdown-to-jsx';
@@ -74,6 +75,7 @@ export default function Edit({ attributes, className, setAttributes }) {
 			{clips.map((clip, clip_index) =>
 				<div class="playlist-clip">
 					<div class="top-row">
+						<PlayButtonImg className="play-button" onClick={() => { player.currentTime = minutes_to_seconds(clip.start); player.play(); }} />
 						<div class="start-field">
 							<TextControl
 								label={`Clip Start (${seconds_to_minutes(clip.start)})`}
@@ -100,7 +102,7 @@ export default function Edit({ attributes, className, setAttributes }) {
 					<Markdown>{clip.description}</Markdown>
 				</div>
 			)}
-			<div class="audio_controls">
+			<div class="audio-controls">
 				<audio controls src={attributes.audio_url} ref={setPlayer}></audio>
 				<a class="back-5" onClick={() => { player.currentTime = player.currentTime - 5; }}>&lt;&lt; 5</a>&nbsp;&nbsp;
 				<a class="forward-5" onClick={() => { player.currentTime = player.currentTime + 5; }}>&gt;&gt; 5</a>
